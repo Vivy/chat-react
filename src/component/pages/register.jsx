@@ -1,9 +1,10 @@
 import { Form, Formik } from 'formik';
 import { FcAddImage } from 'react-icons/fc';
+
 const Register = () => {
   return (
-    <div className='container'>
-      <div className='container__wrapper'>
+    <div className='formContainer'>
+      <div className='formContainer__wrapper'>
         <h2>ChatMe</h2>
         <p className='title'>Register</p>
         <Formik
