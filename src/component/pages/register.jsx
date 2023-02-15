@@ -6,6 +6,7 @@ import { FcAddImage } from 'react-icons/fc';
 import { auth, db, storage } from '../../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   const [err, setErr] = useState(false);
@@ -90,7 +91,9 @@ const Register = () => {
           </Form>
         </Formik>
         {err && <span>Something is wrong</span>}
-        <p>You have an account? Login</p>
+        <p>
+          You have an account? <Link to='/login'>Login</Link>
+        </p>
       </div>
     </div>
   );
