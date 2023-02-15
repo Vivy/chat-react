@@ -18,7 +18,6 @@ const Register = () => {
     const password = valueList.password;
     const file = valueList.file;
     const displayName = valueList.text;
-    console.log(valueList, 'this is valuelist');
 
     try {
       //Create user
@@ -90,6 +89,7 @@ const Register = () => {
             <button type='submit'>Register</button>
           </Form>
         </Formik>
+        {loading && 'Uploading and compressing the image please wait...'}
         {err && <span>Something is wrong</span>}
         <p>
           You have an account? <Link to='/login'>Login</Link>

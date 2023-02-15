@@ -12,7 +12,6 @@ const Login = () => {
   const onSubmit = async (valueList) => {
     const email = valueList.email;
     const password = valueList.password;
-    console.log(valueList, 'this is valuelist');
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
