@@ -5,9 +5,12 @@ import { useState } from 'react';
 import { FcAddImage } from 'react-icons/fc';
 import { auth, db, storage } from '../../firebase';
 import { doc, setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router';
 
 const Register = () => {
   const [err, setErr] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const onSubmit = async (valueList) => {
     const email = valueList.email;
@@ -17,33 +20,42 @@ const Register = () => {
     console.log(valueList, 'this is valuelist');
 
     try {
+      //Create user
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      const storageRef = ref(storage, displayName);
 
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      //Create a unique image name
+      const date = new Date().getTime();
+      const storageRef = ref(storage, `${displayName + date}`);
 
-      uploadTask.on(
-        (error) => {
-          setErr(true);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+      await uploadBytesResumable(storageRef, file).then(() => {
+        getDownloadURL(storageRef).then(async (downloadURL) => {
+          try {
+            //Update profile
             await updateProfile(res.user, {
               displayName,
               photoURL: downloadURL,
             });
+            //create user on firestore
             await setDoc(doc(db, 'users', res.user.uid), {
               uid: res.user.uid,
               displayName,
-              photoURL: downloadURL,
               email,
+              photoURL: downloadURL,
             });
-          });
-        }
-      );
-      console.log(res, 'this is res');
+
+            //create empty user chats on firestore
+            await setDoc(doc(db, 'userChats', res.user.uid), {});
+            navigate('/');
+          } catch (err) {
+            console.log(err);
+            setErr(true);
+            setLoading(false);
+          }
+        });
+      });
     } catch (err) {
       setErr(true);
+      setLoading(false);
     }
   };
   return (
