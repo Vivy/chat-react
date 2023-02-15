@@ -5,9 +5,9 @@ import './style.scss';
 
 const App = () => {
   return (
-    // <Register />
+    <Register />
     // <Login />
-    <Home />
+    // <Home />
   );
 }
 
